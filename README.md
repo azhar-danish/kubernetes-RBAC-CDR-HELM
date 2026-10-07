@@ -126,3 +126,84 @@ Open the Dashboard in your browser:
 http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
 
 for server : kubectl proxy --port=8001 --address=0.0.0.0 --accept-hosts='.*'
+
+
+-------------Custom Resource Definition---------------------------------
+
+1) Create a CRD yml
+
+devops-crd.yml
+---------------------
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: devops.azhargroup.com # must be in the form of <plural>.<group>
+spec:
+  group: azhargroup.com 
+  names:
+    plural: devops  
+    singular: devop
+    kind: DevOps
+    shortNames:
+      - dev
+      - dops
+  scope: Namespaced
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties: 
+            spec:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: "Name of the DevOps batch"
+                duration:
+                  type: string
+                  description: "Duration of the DevOps batch"
+                mode:
+                  type: string
+                  description: "Mode of the DevOps batch"
+                platform:
+                  type: string
+                  description: "Platform of the DevOps batch" 
+
+
+k apply -f devops-crd.yml
+--------------------
+2) 
+azhardanish@Mac CDR % k get crd
+
+NAME                                                  CREATED AT
+devops.azhargroup.com                                 2026-10-07T17:43:19Z
+verticalpodautoscalercheckpoints.autoscaling.k8s.io   2026-10-07T10:49:34Z
+verticalpodautoscalers.autoscaling.k8s.io             2026-10-07T10:49:34Z
+
+3) Create new custom-resource
+
+custom-resource.yml
+------------------------
+
+apiVersion: azhargroup.com/v1
+kind: DevOps
+metadata:
+  name: my-devops-batch
+spec:
+  name: My DevOps Batch
+  duration: 30 days, Mon-Fri, 9am-12pm
+  mode: live
+  platform: Kubernetes 
+
+  k apply -f custom-resource.yml
+------------------------
+
+azhardanish@Mac CDR % kubectl get DevOps
+NAME              AGE
+my-devops-batch   3m10s
+azhardanish@Mac CDR % 
+
+

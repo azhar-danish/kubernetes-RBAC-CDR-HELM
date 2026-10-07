@@ -1,0 +1,9 @@
+apiVersion: azhargroup.com/v1
+kind: DevOps
+metadata:
+  name: my-devops-batch
+spec:
+  name: My DevOps Batch
+  duration: 30 days, Mon-Fri, 9am-12pm
+  mode: live
+  platform: Kubernetes 
