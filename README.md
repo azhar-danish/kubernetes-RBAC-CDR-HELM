@@ -447,6 +447,12 @@ NAME      	NAMESPACE  	REVISION	UPDATED                             	STATUS  	CH
 my-mongodb	development	1       	2026-10-08 14:40:37.151396 +0530 IST	deployed	mongodb-0.20.0	9.0.2      
 
 
+k get secret my-mongodb -n development -o jsonpath="{.data.mongodb-root-password}" | base64 --decode
+
+k exec -it my-mongodb-0 -n development -- mongosh -u admin -p ZbZpLkt8cVWqbKeD
+
+enter in the shell
+
 
 
 
